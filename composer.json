@@ -1,0 +1,13 @@
+{
+    "name": "bram/b35-postmap",
+    "description": "Displays a GitHub-style contribution map of published posts",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bram Esposito",
+            "email": "bram@bramesposito.com"
+        }
+    ],
+    "require": {}
+}
