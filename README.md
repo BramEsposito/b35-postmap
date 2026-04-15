@@ -1,3 +1,5 @@
 # Post Map
 
-Displays a GitHub-style contribution map of published posts
+Displays a GitHub-style contribution grid of published posts.
+
+Use the [postmap] shortcode to generate the grid.
