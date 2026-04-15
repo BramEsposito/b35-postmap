@@ -1,5 +1,5 @@
 {
-    "name": "bram/b35-postmap",
+    "name": "bramesposito/b35-postmap",
     "description": "Displays a GitHub-style contribution map of published posts",
     "type": "wordpress-plugin",
     "license": "MIT",
