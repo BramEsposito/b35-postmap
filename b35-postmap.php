@@ -5,7 +5,7 @@ Plugin URI: http://bramesposito.com
 Description: Displays a GitHub-style contribution map of published posts
 Author: Bram Esposito
 Author URI: http://bramesposito.com
-Version: 1.0.0
+Version: 1.0.1
 Text Domain: b35-postmap
 License: MIT License
 */
