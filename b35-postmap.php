@@ -23,6 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array  Associative array of date => count
  */
 function b35_postmap_get_counts( string $start_date, string $end_date, array $post_types ): array {
+    $cache_key = 'b35_postmap_' . md5( $start_date . $end_date . implode( ',', $post_types ) );
+    $cached    = get_transient( $cache_key );
+    if ( false !== $cached ) {
+        return $cached;
+    }
+
     global $wpdb;
 
     $placeholders = implode( ', ', array_fill( 0, count( $post_types ), '%s' ) );
@@ -47,6 +53,8 @@ function b35_postmap_get_counts( string $start_date, string $end_date, array $po
     foreach ( $results as $row ) {
         $counts[ $row['post_date'] ] = (int) $row['count'];
     }
+
+    set_transient( $cache_key, $counts, HOUR_IN_SECONDS );
 
     return $counts;
 }
@@ -87,10 +95,26 @@ function b35_postmap_render( array $atts ): string {
     $output  = '<div class="b35-postmap" role="img" aria-label="' . esc_attr__( 'Post activity map', 'b35-postmap' ) . '">';
     $output .= '<div class="b35-postmap__grid">';
 
-    $current = clone $start_date;
-    $interval = new DateInterval( 'P1D' );
+    $current    = clone $start_date;
+    $interval   = new DateInterval( 'P1D' );
+    $last_month = null;
 
     while ( $current <= $end_date ) {
+        $week_month  = (int) $current->format( 'n' );
+        $month_label = '';
+        if ( $week_month !== $last_month ) {
+            $days_in_month = (int) $current->format( 't' );
+            $month_first   = new DateTimeImmutable( $current->format( 'Y-m-01' ) );
+            $month_last    = new DateTimeImmutable( $current->format( 'Y-m-t' ) );
+            $overlap_start = $month_first > $start_date ? $month_first : $start_date;
+            $overlap_end   = $month_last < $end_date ? $month_last : $end_date;
+            $days_in_grid  = (int) $overlap_start->diff( $overlap_end )->days + 1;
+            if ( $days_in_grid * 2 >= $days_in_month ) {
+                $month_label = $current->format( 'M' );
+            }
+            $last_month = $week_month;
+        }
+
         $output .= '<div class="b35-postmap__week">';
 
         for ( $d = 0; $d < 7; $d++ ) {
@@ -118,6 +142,10 @@ function b35_postmap_render( array $atts ): string {
             }
         }
 
+        $output .= sprintf(
+            '<div class="b35-postmap__month-label" aria-hidden="true">%s</div>',
+            esc_html( $month_label )
+        );
         $output .= '</div>'; // .b35-postmap__week
     }
 

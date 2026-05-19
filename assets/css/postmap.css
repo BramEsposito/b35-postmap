@@ -1,19 +1,22 @@
 .b35-postmap {
-    display: inline-block;
-    max-width: 100%;
-    overflow-x: auto;
+    display: block;
+    width: 100%;
 }
 
 .b35-postmap__grid {
     display: flex;
     flex-direction: row;
-    gap: 3px;
+    gap: 2px;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 .b35-postmap__week {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    width: 12px;
+    flex-shrink: 0;
+    gap: 2px;
 }
 
 .b35-postmap__day {
@@ -28,12 +31,34 @@
     visibility: hidden;
 }
 
+.b35-postmap__month-label {
+    font-size: 10px;
+    line-height: 1;
+    color: #6e7681;
+    white-space: nowrap;
+    overflow: visible;
+    margin-top: 2px;
+}
+
 .b35-postmap__day[data-level="1"] { background-color: var(--b35-postmap-color-1, #9be9a8); }
 .b35-postmap__day[data-level="2"] { background-color: var(--b35-postmap-color-2, #40c463); }
 .b35-postmap__day[data-level="3"] { background-color: var(--b35-postmap-color-3, #30a14e); }
 .b35-postmap__day[data-level="4"] { background-color: var(--b35-postmap-color-4, #216e39); }
 
+@media (max-width: 767px) {
+    .b35-postmap__week:not(:nth-last-child(-n+26)) {
+        display: none;
+    }
+}
+
+@media (max-width: 479px) {
+    .b35-postmap__week:not(:nth-last-child(-n+16)) {
+        display: none;
+    }
+}
+
 @media (prefers-color-scheme: dark) {
+    .b35-postmap__month-label { color: #8b949e; }
     .b35-postmap__day { background-color: var(--b35-postmap-color-0, #161b22); }
     .b35-postmap__day[data-level="1"] { background-color: var(--b35-postmap-color-1, #0e4429); }
     .b35-postmap__day[data-level="2"] { background-color: var(--b35-postmap-color-2, #006d32); }
